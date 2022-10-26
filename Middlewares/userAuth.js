@@ -31,4 +31,4 @@ const saveUser = async (req, res, next) => {
   }
 };
 
-module.exports = saveUser;
+module.exports = { saveUser };

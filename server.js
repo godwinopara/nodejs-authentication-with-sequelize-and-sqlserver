@@ -1,6 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const db = require("./Models");
+const userRoutes = require("./Routes/userRoutes");
 
 const app = express();
 
@@ -16,17 +17,7 @@ const createDbTable = async () => {
 
 createDbTable();
 
-// const createUser = async () => {
-//   const user = {
-//     userName: "john",
-//     email: "johndoe@gmail.com",
-//     password: "johnpassword",
-//   };
-//   const jane = await Users.create(user);
-//   console.log("Jane's auto-generated ID:", jane.id);
-// };
-
-// createUser();
+app.use("/api/users", userRoutes);
 
 const port = 5000;
 app.listen(port, () => console.log(`App running on port ${port}`));

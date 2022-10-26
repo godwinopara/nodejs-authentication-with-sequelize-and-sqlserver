@@ -36,13 +36,22 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = Users.findOne({ email });
+
+    const user = Users.findOne({
+      where: {
+        email: email,
+      },
+    });
 
     if (user) {
+      const userData = await user;
       const validateUserPassword = await bcrypt.compare(
         password,
-        user.password
+        userData.password
       );
+      console.log("validate", validateUserPassword);
+
+      //   const validateUserPassword = user
 
       if (validateUserPassword) {
         let token = jwt.sign({ id: user.id }, process.env.secretKey, {
@@ -53,10 +62,10 @@ const login = async (req, res) => {
           maxAge: 1 * 24 * 60 * 60,
           httpOnly: true,
         });
-        console.log("user", JSON.stringify(user, null, 2));
+        console.log("user", JSON.stringify(userData, null, 2));
         console.log(token);
 
-        res.status(201).send(user);
+        res.status(201).send(userData);
       } else {
         res.status(401).send("Authentication Failed");
       }
